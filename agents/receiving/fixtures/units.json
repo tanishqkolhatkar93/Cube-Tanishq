@@ -1,21 +1,116 @@
 {
   "units": {
     "UNIT-9001": {
-      "org_id": "org_demo_alpha", "po_number": "PO-9001", "po_line": 1,
-      "supplier": "Supplier Pod (FIXTURE)", "operator_id": "op_zed",
+      "org_id": "org_demo_alpha",
+      "po_number": "PO-9001",
+      "po_line": 1,
+      "supplier": "Supplier Pod (FIXTURE)",
+      "operator_id": "op_zed",
       "captured_at": "2026-10-05T09:30:00Z",
-      "sku": "SKU-BOTTLE-750", "product_title": "Steel Water Bottle",
-      "spec_colour": "black", "spec_variant": "750ml",
-      "spec_components": ["bottle", "lid"],
-      "cartons_ordered": 2, "units_per_carton_ordered": 12, "qty_ordered": 24
+      "sku": "SKU-BOTTLE-750",
+      "product_title": "Steel Water Bottle",
+      "spec_colour": "black",
+      "spec_variant": "750ml",
+      "spec_components": [
+        "bottle",
+        "lid"
+      ],
+      "cartons_ordered": 2,
+      "units_per_carton_ordered": 12,
+      "qty_ordered": 24
     },
     "UNIT-9002": {
-      "org_id": "org_demo_bravo", "po_number": "PO-9002", "po_line": 1,
-      "supplier": "Supplier Pod (FIXTURE)", "operator_id": "op_zed",
+      "org_id": "org_demo_bravo",
+      "po_number": "PO-9002",
+      "po_line": 1,
+      "supplier": "Supplier Pod (FIXTURE)",
+      "operator_id": "op_zed",
       "captured_at": "2026-10-05T10:15:00Z",
-      "sku": "SKU-BOTTLE-750", "product_title": "Steel Water Bottle",
-      "spec_colour": "black", "spec_variant": "750ml", "spec_components": null,
-      "cartons_ordered": 1, "units_per_carton_ordered": 12, "qty_ordered": 12
+      "sku": "SKU-BOTTLE-750",
+      "product_title": "Steel Water Bottle",
+      "spec_colour": "black",
+      "spec_variant": "750ml",
+      "spec_components": null,
+      "cartons_ordered": 1,
+      "units_per_carton_ordered": 12,
+      "qty_ordered": 12
+    },
+    "UNIT-9003": {
+      "org_id": "org_demo_alpha",
+      "po_number": "PO-9003",
+      "po_line": 1,
+      "supplier": "Supplier Pod (FIXTURE)",
+      "operator_id": "op_zed",
+      "captured_at": "2026-10-05T11:00:00Z",
+      "sku": "SKU-BOTTLE-750",
+      "product_title": "Steel Water Bottle",
+      "spec_colour": "black",
+      "spec_variant": "750ml",
+      "spec_components": [
+        "bottle",
+        "lid"
+      ],
+      "cartons_ordered": 1,
+      "units_per_carton_ordered": 6,
+      "qty_ordered": 6
+    },
+    "UNIT-9004": {
+      "org_id": "org_demo_alpha",
+      "po_number": "PO-9004",
+      "po_line": 1,
+      "supplier": "Supplier Pod (FIXTURE)",
+      "operator_id": "op_zed",
+      "captured_at": "2026-10-05T12:00:00Z",
+      "sku": "SKU-BOTTLE-750",
+      "product_title": "Steel Water Bottle",
+      "spec_colour": "black",
+      "spec_variant": "750ml",
+      "spec_components": [
+        "bottle",
+        "lid"
+      ],
+      "cartons_ordered": 1,
+      "units_per_carton_ordered": 6,
+      "qty_ordered": 6
+    },
+    "UNIT-9005": {
+      "org_id": "org_demo_alpha",
+      "po_number": "PO-9005",
+      "po_line": 1,
+      "supplier": "Supplier Pod (FIXTURE)",
+      "operator_id": "op_zed",
+      "captured_at": "2026-10-05T12:00:00Z",
+      "sku": "SKU-BOTTLE-750",
+      "product_title": "Steel Water Bottle",
+      "spec_colour": "black",
+      "spec_variant": "750ml",
+      "spec_components": [
+        "bottle",
+        "lid"
+      ],
+      "cartons_ordered": 1,
+      "units_per_carton_ordered": 6,
+      "qty_ordered": 6
+    },
+    "UNIT-0014": {
+      "org_id": "org_demo_alpha",
+      "po_number": "PO-0014",
+      "po_line": 3,
+      "supplier": "Supplier Coastal (DUMMY)",
+      "operator_id": "op_amira",
+      "captured_at": "2026-06-04T14:36:00Z",
+      "sku": "SKU-LAMP-LED",
+      "product_title": "LED Desk Lamp",
+      "spec_colour": "grey",
+      "spec_variant": "standard",
+      "spec_components": [
+        "lamp",
+        "usb cable",
+        "manual"
+      ],
+      "cartons_ordered": 2,
+      "units_per_carton_ordered": 12,
+      "qty_ordered": 24
     }
   }
 }

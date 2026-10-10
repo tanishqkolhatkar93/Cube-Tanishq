@@ -5,8 +5,8 @@ AGENT_DIR = Path(__file__).resolve().parents[1]     # agents/receiving
 REPO_ROOT = Path(__file__).resolve().parents[3]     # pod repo root
 
 class Config:
-    gemini_api_key: str = os.environ.get("GEMINI_API_KEY", "")
-    gemini_model: str = os.environ.get("GEMINI_MODEL", "gemini-3-flash-preview")
+    gemini_api_key: str = os.environ.get("RECEIVING_GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY", "")
+    gemini_model: str = os.environ.get("RECEIVING_GEMINI_MODEL") or os.environ.get("GEMINI_MODEL", "gemini-3-flash-preview")
     gemini_fallback_models: list = [m.strip() for m in os.environ.get(
         "GEMINI_FALLBACK_MODELS", "").split(",") if m.strip()]
     cache_dir: Path = Path(os.environ.get("RECEIVING_CACHE_DIR", REPO_ROOT / "out" / "receiving-cache"))

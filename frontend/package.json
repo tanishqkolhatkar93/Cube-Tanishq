@@ -1,6 +1,9 @@
 {
-  "devDependencies": {
-    "@vitejs/plugin-react": "^6.1.2",
-    "vite": "^8.3.4"
+  "name": "cube-round3-operations-console",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "serve": "echo \"Frontend is served by FastAPI at http://localhost:8100\"",
+    "test": "echo \"Run pytest tests/e2e/test_frontend.py from the repo root\""
   }
 }

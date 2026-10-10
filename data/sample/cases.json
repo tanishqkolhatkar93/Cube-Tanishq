@@ -598,5 +598,35 @@
     "unit_id": "UNIT-0100",
     "route": "mfn",
     "returned": false
+  },
+  {
+    "org_id": "org_demo_bravo",
+    "unit_id": "UNIT-9002",
+    "route": "unknown",
+    "returned": false
+  },
+  {
+    "org_id": "org_demo_alpha",
+    "unit_id": "UNIT-9001",
+    "route": "fba",
+    "returned": false
+  },
+  {
+    "org_id": "org_demo_alpha",
+    "unit_id": "UNIT-9003",
+    "route": "fba",
+    "returned": false
+  },
+  {
+    "org_id": "org_demo_alpha",
+    "unit_id": "UNIT-9004",
+    "route": "mfn",
+    "returned": false
+  },
+  {
+    "org_id": "org_demo_alpha",
+    "unit_id": "UNIT-9005",
+    "route": "mfn",
+    "returned": false
   }
 ]

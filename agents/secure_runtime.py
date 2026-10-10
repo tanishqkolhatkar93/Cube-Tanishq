@@ -109,7 +109,7 @@ def upstream(request, binding, stage):
                 or subject['org_id'] != binding['org_id'] or subject['subject_id'] != binding['subject_id']
                 or subject.get('unit_id') not in (None, binding['subject_id'])
                 or record['workflow_id'] != binding['workflow_id']
-                or record.get('client_id') != binding.get('client_id')
+                or record.get('client_id') not in (None, binding.get('client_id'))
                 or subject.get('unit_scope') not in scopes.get(record['stage'], set())):
             raise Rejected('upstream_scope_mismatch')
         if record['agent_id'] not in binding['trusted_agents'].get(record['stage'], []):

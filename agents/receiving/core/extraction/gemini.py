@@ -45,7 +45,11 @@ class GeminiProvider(VisionProvider):
                                 retry_options=self.types.HttpRetryOptions(attempts=1))))
                     if time.monotonic() > deadline:
                         raise Failure("agent_timeout")
-                    parsed = req.schema_model.model_validate_json(resp.text)
+                    parsed_value = getattr(resp, "parsed", None)
+                    if parsed_value is not None:
+                        parsed = req.schema_model.model_validate(parsed_value)
+                    else:
+                        parsed = req.schema_model.model_validate_json(resp.text)
                     attempt["outcome"] = "success"
                     usage = getattr(resp, "usage_metadata", None)
                     return VisionResponse(parsed=parsed, raw_text=resp.text, model_id=model,

@@ -17,6 +17,7 @@ import os
 import secrets
 import threading
 import time
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -24,10 +25,30 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def load_local_env(path: Path = ROOT / ".env") -> None:
+    """Load local demo env without overriding real process env."""
+    if not path.exists():
+        return
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = re.sub(r"\s+#.*$", "", value).strip()
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+load_local_env()
+
 from shared.utils import sample_data
 
 from .clients import HttpClient, client_for, load_manifest
-from .orchestrator import apply_override, bundle, default_flow_path, flow_stages, load_flow, resume, run_workflow
+from .orchestrator import apply_override, bundle, default_flow_path, discover_inputs, flow_stages, load_flow, resume, run_workflow
 from .store import EvidenceConflict, FileStore, StoreIntegrityError, identifier
 
 app = FastAPI(title="CUBE Round 3 orchestrator")
@@ -42,6 +63,9 @@ TENANT_TOKEN_ENV = {
     "org_demo_alpha": "ORG_ALPHA_TOKEN",
     "org_demo_bravo": "ORG_BRAVO_TOKEN",
 }
+DEFAULT_INPUT_ROOT = Path(__file__).resolve().parents[1] / "data" / "input"
+MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+SAFE_FILENAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._ -]{0,127}$")
 
 
 def same_secret(left: str, right: str) -> bool:
@@ -91,6 +115,34 @@ def require_principal(request: Request) -> Principal:
     if not isinstance(principal, Principal):
         raise HTTPException(401, "authenticated tenant context required")
     return principal
+
+
+def safe_stage(stage: str) -> str:
+    if stage not in set(flow_stages(load_flow(FLOW))):
+        raise HTTPException(404, "stage not found in configured flow")
+    return stage
+
+
+def safe_filename(filename: str) -> str:
+    if not isinstance(filename, str) or not SAFE_FILENAME.fullmatch(filename):
+        raise HTTPException(422, "safe filename required")
+    if filename in {".", ".."} or any(part in filename for part in ("/", "\\", ":", "%")):
+        raise HTTPException(422, "safe filename required")
+    return filename
+
+
+def input_root() -> Path:
+    return Path(os.environ.get("INPUT_DIR", DEFAULT_INPUT_ROOT)).resolve()
+
+
+def input_folder(unit_id: str, stage: str) -> Path:
+    unit = identifier(unit_id)
+    stage = safe_stage(stage)
+    root = input_root()
+    folder = (root / unit / stage).resolve()
+    if not folder.is_relative_to(root):
+        raise HTTPException(422, "invalid input path")
+    return folder
     
 # --- Demo principal: OFF by default; set ONLY by the operator via env (server-side
 # trusted configuration, not a client header). Production replaces this with real
@@ -256,6 +308,59 @@ def override(workflow_id: str, body: dict, principal: Principal = Depends(requir
                               reason=body.get("reason", ""), new_outcome=body.get("new_outcome"))
     except ValueError:
         raise HTTPException(422, "invalid override") from None
+
+
+@app.get("/inputs/{unit_id}")
+def list_inputs(unit_id: str, principal: Principal = Depends(require_principal)) -> dict:
+    unit = identifier(unit_id)
+    stages = flow_stages(load_flow(FLOW))
+    return {
+        "org_id": principal.org_id,
+        "unit_id": unit,
+        "stages": {stage: discover_inputs(unit, stage) for stage in stages},
+    }
+
+
+@app.post("/inputs/{unit_id}/{stage}")
+async def upload_input(unit_id: str, stage: str, request: Request, filename: str,
+                       principal: Principal = Depends(require_principal)) -> dict:
+    name = safe_filename(filename)
+    folder = input_folder(unit_id, stage)
+    body = await request.body()
+    if not body:
+        raise HTTPException(422, "file body required")
+    if len(body) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "file too large")
+    folder.mkdir(parents=True, exist_ok=True)
+    target = (folder / name).resolve()
+    if target.parent != folder:
+        raise HTTPException(422, "invalid input path")
+    target.write_bytes(body)
+    return {
+        "org_id": principal.org_id,
+        "unit_id": identifier(unit_id),
+        "stage": safe_stage(stage),
+        "inputs": discover_inputs(identifier(unit_id), safe_stage(stage)),
+    }
+
+
+@app.delete("/inputs/{unit_id}/{stage}/{filename}")
+def delete_input(unit_id: str, stage: str, filename: str, principal: Principal = Depends(require_principal)) -> dict:
+    name = safe_filename(filename)
+    folder = input_folder(unit_id, stage)
+    target = (folder / name).resolve()
+    if target.parent != folder:
+        raise HTTPException(422, "invalid input path")
+    try:
+        target.unlink()
+    except FileNotFoundError:
+        raise HTTPException(404, "input not found") from None
+    return {
+        "org_id": principal.org_id,
+        "unit_id": identifier(unit_id),
+        "stage": safe_stage(stage),
+        "inputs": discover_inputs(identifier(unit_id), safe_stage(stage)),
+    }
 
 
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")

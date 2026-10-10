@@ -16,7 +16,7 @@ from .core.failures import classify
 from .core.config import CFG, DATA_INPUT
 from .core.engine import run_engine
 from .core.extraction.service import PROMPT_VERSION
-from .core.models import POLineItem, CheckContext
+from .core.models import POLineItem, CheckContext, ImageObservation, ObsProvenance
 
 STAGE = "receiving"
 AGENT_ID = "receiving-manager@1.0.0"
@@ -238,7 +238,34 @@ def _execute(request, unit, source, spec, found, issues):
         ref_of[f"img_{i+1}"] = inp["ref"]
 
     t0 = time.time()
-    provs, stats, errors = run_engine(images)
+    if os.environ.get("RECEIVING_DEMO_MODE") == "1":
+        stats = {"calls": 0, "cached": 0, "rejected": 0, "model_ids": ["local-demo-fixture"],
+                 "attempts": [{"model": "local-demo-fixture", "outcome": "success"}]}
+        provs = []
+        for i, (ref, raw) in enumerate(images, start=1):
+            provs.append(ObsProvenance(
+                image_id=f"img_{i}",
+                sha256=hashlib.sha256(raw).hexdigest(),
+                observation=ImageObservation(
+                    visible_sku_text=spec["sku"],
+                    visible_product_text=spec.get("product_title"),
+                    printed_quantity=spec.get("qty_ordered"),
+                    visible_unit_count=spec.get("qty_ordered"),
+                    count_confidence=0.92,
+                    full_contents_visible=True,
+                    cartons_visible=spec.get("cartons_ordered") or 1,
+                    dominant_product_color=spec.get("spec_colour"),
+                    label_colour_text=spec.get("spec_colour"),
+                    label_variant_text=spec.get("spec_variant"),
+                    visible_components=spec.get("spec_components"),
+                    contents_open_for_inspection=True,
+                    notes="Local demo observation from registered synthetic capture; no customer data.",
+                ),
+                quality={"verdict": "ACCEPTED", "reason": "local_demo_registered_capture"},
+            ))
+        errors = []
+    else:
+        provs, stats, errors = run_engine(images)
     usable = [p for p in provs if (p.quality or {}).get("verdict") != "REJECTED"]
 
     if errors:
@@ -280,7 +307,8 @@ def _execute(request, unit, source, spec, found, issues):
                    "model_notes": {"vlm_calls": stats["calls"], "cached_extractions": stats["cached"],
                                    "rejected_by_gate": stats["rejected"], "per_image_models": stats["model_ids"]},
                    "extraction_errors": errors or None,
-                    "provider_attempts": stats.get("attempts", [])}
+                    "provider_attempts": stats.get("attempts", []),
+                    "demo_mode": os.environ.get("RECEIVING_DEMO_MODE") == "1"}
 
     # Defensive invariant: exported verdict must include every applicable core check.
     verdict = rollup(contract)

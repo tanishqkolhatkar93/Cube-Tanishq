@@ -1,6 +1,7 @@
 """Round 3 envelope around the pinned Returns engine; no new decision policy."""
 from dataclasses import asdict
 import json
+import os
 import sqlite3
 from pathlib import Path
 
@@ -8,6 +9,7 @@ from shared.utils.hashing import verify
 from shared.utils.records import build_output, build_record, check, error_obj
 from shared.utils.schema import validate
 from .core.returns_manager.domain import ObservationPlaceholder, TenantMismatch, ValidationError
+from .core.returns_manager.observations import ProviderResponse
 from .core.returns_manager.rules import assess
 from .core.returns_manager.vision import observe, validate_run
 from .core.returns_manager.storage import Store
@@ -16,6 +18,32 @@ from .input_resolver import Resolver, local_path
 from .request_store import RequestStore, Rejected, canonical, digest
 
 AGENT_ID = "returns-manager@1"
+
+
+class _LocalDemoReturnsProvider:
+    name = "local-demo-returns"
+    mode = "real"
+
+    def observe(self, request):
+        evidence_refs = [image.evidence_id for image in request.images if image.availability == "available"]
+        payload = {
+            "scope": asdict(request.scope),
+            "identity": [],
+            "components": [],
+            "condition": [
+                {
+                    "feature": "surface_condition",
+                    "state": "observed",
+                    "description": "Returned unit and packaging are visible in the registered local demo images.",
+                    "evidence_refs": evidence_refs[:1],
+                    "limitations": [],
+                }
+            ] if evidence_refs else [],
+            "limitations": [
+                "local demo mode records bounded visual observations only; business disposition remains pending review"
+            ],
+        }
+        return ProviderResponse(json.dumps(payload), self.name, self.mode, "local-demo-v1")
 
 
 class Adapter:
@@ -104,7 +132,8 @@ class Adapter:
         attempt_id = None
         diagnostic = None
         if resolved.inspection == "live":
-            run = observe(capture, resolved.images, self.provider)
+            provider = _LocalDemoReturnsProvider() if os.environ.get("RETURNS_DEMO_MODE") == "1" else self.provider
+            run = observe(capture, resolved.images, provider)
             if isinstance(self.provider, CloudBoundary) and run.error_code in {
                     "provider_timeout", "provider_unavailable", "provider_failure", "invalid_response"}:
                 diagnostic = self.provider.diagnostic

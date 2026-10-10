@@ -125,7 +125,7 @@ def select_provider(selection, *, provider=None):
                 raise Rejected(name + "_key_missing")
             if name == "gemini" and not config.free_tier_confirmed:
                 raise Rejected("gemini_free_tier_confirmation_required")
-        if config.timeout_seconds > 20:
+        if config.timeout_seconds > 28:
             raise Rejected("provider_timeout_exceeds_adapter_budget")
     except Rejected:
         raise

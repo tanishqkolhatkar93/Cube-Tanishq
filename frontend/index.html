@@ -3,248 +3,204 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light">
     <title>CUBE Operations</title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="/app.js" defer></script>
   </head>
   <body>
-    <section class="login-screen" id="login-screen" aria-labelledby="login-title">
-      <div class="login-card">
-        <a class="brand login-brand" href="/" aria-label="CUBE Operations home">
-          <span class="brand-mark" aria-hidden="true">C</span>
-          <span><strong>CUBE</strong><small>COMMERCE OPERATIONS</small></span>
-        </a>
-        <p class="eyebrow">CUBE ROUND 3 / POD</p>
-        <h1 id="login-title">Sign in to operations</h1>
-        <p class="login-intro">Use your organization’s server-configured access token to open its workflow workspace.</p>
-        <form id="login-form" class="form-stack">
-          <label class="field">
-            <span>Organization</span>
-            <select name="org_id" required>
-              <option value="org_demo_alpha">org_demo_alpha</option>
-              <option value="org_demo_bravo">org_demo_bravo</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Organization access token</span>
-            <input name="token" type="password" autocomplete="current-password" required>
-            <small>The token is checked by the orchestrator and is not saved in browser storage.</small>
-          </label>
-          <button class="button button-primary button-full" type="submit" id="login-submit">Sign in</button>
-          <p class="form-message" id="login-message" role="status" aria-live="polite"></p>
-        </form>
-        <p class="login-footnote">Local/demo sign-in · session expires after eight hours · use HTTPS outside localhost.</p>
-      </div>
-    </section>
-
-    <div class="app-shell" id="app-shell" hidden>
+    <div class="app-shell">
       <aside class="sidebar" aria-label="Primary navigation">
-        <a class="brand" href="/" aria-label="CUBE Operations home">
-          <span class="brand-mark" aria-hidden="true">C</span>
-          <span><strong>CUBE</strong><small>COMMERCE OPERATIONS</small></span>
-        </a>
-
-        <p class="nav-label">WORKSPACE</p>
-        <nav class="primary-nav">
-          <button class="nav-item is-active" type="button" data-page-target="overview">
-            <span class="nav-icon" aria-hidden="true">01</span>Overview
-          </button>
-          <button class="nav-item" type="button" data-page-target="workflows">
-            <span class="nav-icon" aria-hidden="true">02</span>Workflows
-          </button>
-        </nav>
-
-        <div class="sidebar-bottom">
-          <div class="sidebar-caption">SYSTEM HEALTH</div>
-          <div class="sidebar-health">
-            <span class="health-dot" id="health-dot"></span>
-            <span id="health-label">Connecting to orchestrator</span>
+        <div class="brand">
+          <div class="brand-mark">C</div>
+          <div>
+            <strong>CUBE Operations</strong>
+            <span>Five agent managers</span>
           </div>
-          <p class="sidebar-footnote">Tenant-scoped workspace. Agent registrations remain server-managed.</p>
+        </div>
+        <nav class="nav-list">
+          <a href="#workflow" class="nav-item active">Workflow</a>
+          <a href="#uploads" class="nav-item">Uploads</a>
+          <a href="#evidence" class="nav-item">Evidence</a>
+          <a href="#debug" class="nav-item">Debug</a>
+        </nav>
+        <div class="sidebar-note">
+          <strong>Local console</strong>
+          <span>Same-origin API. Session token stays server-side in an HttpOnly cookie.</span>
         </div>
       </aside>
 
-      <main class="main-content">
+      <main class="workspace">
         <header class="topbar">
-          <div class="breadcrumbs"><span>Workspace</span><span aria-hidden="true">/</span><strong id="breadcrumb-current">Overview</strong></div>
-          <div class="topbar-actions">
-            <span class="session-org" id="session-org"></span>
-            <span class="environment-label"><span class="environment-dot"></span>ORCHESTRATOR</span>
-            <button class="button button-quiet button-small" type="button" id="refresh-button">Refresh</button>
-            <button class="button button-quiet button-small" type="button" id="logout-button">Sign out</button>
+          <div>
+            <p class="eyebrow">Round 3 Pod Integration</p>
+            <h1>Unified commerce workflow</h1>
+            <p class="top-subtitle">One orchestrated chain from Receiving to Final Commerce Outcome, with evidence and uncertainty visible.</p>
+          </div>
+          <div class="top-actions">
+            <button id="refreshHealth" class="icon-button" title="Refresh health" aria-label="Refresh health">↻</button>
+            <button id="signOut" class="secondary hidden">Sign out</button>
           </div>
         </header>
 
-        <div class="page-wrap">
-          <div class="notice" id="global-notice" role="status" aria-live="polite" hidden></div>
+        <section id="sessionPanel" class="section auth-section">
+          <div>
+            <h2>Sign in</h2>
+            <p>Use the local organization token configured in `.env`.</p>
+          </div>
+          <form id="loginForm" class="auth-form">
+            <label>
+              Organization
+              <select id="orgId" name="org_id">
+                <option value="org_demo_alpha">org_demo_alpha</option>
+                <option value="org_demo_bravo">org_demo_bravo</option>
+              </select>
+            </label>
+            <label>
+              Organization access token
+              <input id="token" name="token" type="password" autocomplete="off" placeholder="alpha-local-token">
+            </label>
+            <button type="submit">Sign in</button>
+          </form>
+          <p id="sessionMessage" class="message"></p>
+        </section>
 
-          <section class="page-section" data-page="overview">
-            <div class="page-heading">
+        <section class="section" aria-labelledby="healthTitle">
+          <div class="section-header">
+            <div>
+              <h2 id="healthTitle">System health</h2>
+              <p id="healthSummary">Checking orchestrator and agent status...</p>
+            </div>
+            <span id="flowBadge" class="status-pill neutral">flow unknown</span>
+          </div>
+          <div id="agentGrid" class="agent-grid"></div>
+        </section>
+
+        <section class="section demo-strip" aria-labelledby="demoTitle">
+          <div>
+            <p class="eyebrow">Handbook demo path</p>
+            <h2 id="demoTitle">One connected system, not five separate demos</h2>
+          </div>
+          <div class="demo-points">
+            <span>Unified workflow</span>
+            <span>Agent evidence</span>
+            <span>Final outcome</span>
+            <span>Overrides</span>
+          </div>
+        </section>
+
+        <section id="workflow" class="section workflow-grid" aria-labelledby="workflowTitle">
+          <div class="panel">
+            <div class="section-header compact">
               <div>
-                <p class="eyebrow">CUBE ROUND 3 / POD</p>
-                <h1>Operations overview</h1>
-                <p class="page-subtitle">Follow a unit from receiving through its final commerce outcome.</p>
+                <h2 id="workflowTitle">Create workflow</h2>
+                <p>Run a unit through Receiving, Prep or Pack, Returns, Recovery, and the final outcome.</p>
               </div>
-              <span class="flow-label"><span class="flow-pulse"></span>STANDARD FLOW</span>
             </div>
-
-            <section class="metrics-grid" aria-label="Recent workflow summary">
-              <article class="metric-card">
-                <span class="metric-label">RECENT WORKFLOWS</span>
-                <strong class="metric-value" id="metric-total">—</strong>
-                <span class="metric-foot">Saved in this browser</span>
-              </article>
-              <article class="metric-card">
-                <span class="metric-label">IN PROGRESS</span>
-                <strong class="metric-value" id="metric-active">—</strong>
-                <span class="metric-foot">Awaiting stage completion</span>
-              </article>
-              <article class="metric-card">
-                <span class="metric-label">NEEDS ATTENTION</span>
-                <strong class="metric-value" id="metric-attention">—</strong>
-                <span class="metric-foot">Review, recovery or retry</span>
-              </article>
-              <article class="metric-card">
-                <span class="metric-label">CLAIMS RECOMMENDED</span>
-                <strong class="metric-value" id="metric-claims">—</strong>
-                <span class="metric-foot">Based on recorded evidence</span>
-              </article>
-            </section>
-
-            <section class="agent-overview" aria-labelledby="agent-overview-title">
-              <div class="panel-heading panel-heading-row">
-                <div>
-                  <p class="eyebrow">INTEGRATED PIPELINE</p>
-                  <h2 id="agent-overview-title">Five agent managers</h2>
-                </div>
-                <span class="agent-count" id="agent-count">Checking</span>
+            <form id="workflowForm" class="workflow-form">
+              <label>
+                Unit ID
+                <input id="unitId" name="unit_id" value="UNIT-0014" required>
+              </label>
+              <label>
+                Route
+                <select id="route" name="route">
+                  <option value="">Auto from sample data</option>
+                  <option value="fba">FBA - Prep route</option>
+                  <option value="mfn">MFN - Pack route</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </label>
+              <label class="switch-row">
+                <input id="returned" name="returned" type="checkbox" checked>
+                <span>Returned item</span>
+              </label>
+              <button id="runWorkflow" type="submit">Run workflow</button>
+            </form>
+            <div class="recent-box">
+              <div class="mini-header">
+                <strong>Recent workflows</strong>
+                <button id="clearRecent" class="link-button" type="button">Clear</button>
               </div>
-              <div class="agent-grid" id="agent-grid" aria-live="polite">
-                <div class="loading-state"><span class="spinner" aria-hidden="true"></span>Checking agent connections…</div>
-              </div>
-            </section>
-
-            <div class="content-grid">
-              <section class="panel create-panel">
-                <div class="panel-heading">
-                  <div>
-                    <p class="eyebrow">NEW RUN</p>
-                    <h2>Start a workflow</h2>
-                  </div>
-                  <span class="step-index">01</span>
-                </div>
-                <p class="panel-intro">The orchestrator runs the applicable agents and records each stage's evidence.</p>
-                <form id="create-form" class="form-stack">
-                  <label class="field">
-                    <span>Organization ID</span>
-                    <input name="org_id" type="text" autocomplete="organization" readonly required maxlength="120">
-                    <small>Selected by the authenticated tenant session.</small>
-                  </label>
-                  <label class="field">
-                    <span>Unit or subject ID</span>
-                    <input name="unit_id" type="text" placeholder="UNIT-0014" required maxlength="160">
-                  </label>
-                  <div class="form-row">
-                    <label class="field">
-                      <span>Fulfilment route</span>
-                      <select name="route">
-                        <option value="">Auto-detect from sample data</option>
-                        <option value="fba">FBA</option>
-                        <option value="mfn">Merchant fulfilled</option>
-                        <option value="unknown">Unknown</option>
-                      </select>
-                    </label>
-                    <label class="field">
-                      <span>Returned?</span>
-                      <select name="returned">
-                        <option value="">Auto-detect from sample data</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                      </select>
-                    </label>
-                  </div>
-                  <p class="form-hint">Submitting starts the workflow immediately. Route and return status default to sample data; each agent uses its separately registered trusted inputs.</p>
-                  <button class="button button-primary button-full" type="submit" id="create-submit">
-                    Start workflow <span aria-hidden="true">→</span>
-                  </button>
-                  <p class="form-message" id="create-message" role="status" aria-live="polite"></p>
-                </form>
-              </section>
-
-              <section class="panel recent-panel">
-                <div class="panel-heading panel-heading-row">
-                  <div>
-                    <p class="eyebrow">ACTIVITY</p>
-                    <h2>Recent workflows</h2>
-                  </div>
-                  <button class="text-button" type="button" data-page-target="workflows">View all <span aria-hidden="true">→</span></button>
-                </div>
-                <p class="panel-intro">This list is stored in the current browser. Open a workflow by ID to add it here.</p>
-                <div class="workflow-list" id="overview-workflows">
-                  <div class="loading-state"><span class="spinner" aria-hidden="true"></span>Loading recent workflows…</div>
-                </div>
-              </section>
+              <div id="recentWorkflows" class="recent-list empty">No recent workflows in this browser.</div>
             </div>
-          </section>
+          </div>
 
-          <section class="page-section" data-page="workflows" hidden>
-            <div class="page-heading">
+          <div class="panel">
+            <div class="section-header compact">
               <div>
-                <p class="eyebrow">WORKSPACE</p>
-                <h1>Workflows</h1>
-                <p class="page-subtitle">Review workflow state and open the full evidence chain.</p>
+                <h2>Current workflow</h2>
+                <p id="workflowSummary">No workflow loaded.</p>
               </div>
+              <button id="resumeWorkflow" class="secondary" type="button" disabled>Resume</button>
             </div>
-            <section class="panel lookup-panel">
-              <div class="panel-heading">
-                <div>
-                  <p class="eyebrow">FIND A WORKFLOW</p>
-                  <h2>Open by workflow ID</h2>
-                </div>
-              </div>
-              <form class="lookup-form" id="lookup-form">
-                <label class="field lookup-field">
-                  <span class="visually-hidden">Workflow ID</span>
-                  <input name="workflow_id" type="text" placeholder="WF-org_demo_alpha-UNIT-0014" required maxlength="300">
-                </label>
-                <button class="button button-primary" type="submit">Open workflow</button>
-              </form>
-              <p class="form-message" id="lookup-message" role="status" aria-live="polite"></p>
-            </section>
-            <section class="panel list-panel">
-              <div class="panel-heading panel-heading-row">
-                <div>
-                  <p class="eyebrow">THIS BROWSER</p>
-                  <h2>Recent workflows</h2>
-                </div>
-                <label class="search-field">
-                  <span class="visually-hidden">Filter recent workflows</span>
-                  <input type="search" id="workflow-filter" placeholder="Filter by unit, org or status">
-                </label>
-              </div>
-              <div class="workflow-list" id="all-workflows">
-                <div class="loading-state"><span class="spinner" aria-hidden="true"></span>Loading recent workflows…</div>
-              </div>
-            </section>
-          </section>
+            <div id="timeline" class="timeline empty">Run or load a workflow to see the five-stage timeline.</div>
+            <div id="outcomePanel" class="outcome empty">Final outcome will appear here.</div>
+            <div id="demoReadiness" class="demo-readiness"></div>
+          </div>
+        </section>
 
-          <section class="page-section" data-page="detail" hidden>
-            <div class="detail-toolbar">
-              <button class="back-button" type="button" data-page-target="workflows"><span aria-hidden="true">←</span> Workflows</button>
-              <button class="button button-quiet button-small" type="button" id="detail-refresh-button">Refresh record</button>
+        <section id="uploads" class="section" aria-labelledby="uploadsTitle">
+          <div class="section-header">
+            <div>
+              <h2 id="uploadsTitle">Stage inputs</h2>
+              <p>Upload captures and documents into the local input store before running a workflow. Analysis still comes only from the agents.</p>
             </div>
-            <div id="workflow-detail">
-              <div class="loading-state"><span class="spinner" aria-hidden="true"></span>Loading workflow and evidence…</div>
-            </div>
-          </section>
+            <span class="status-pill ok">upload API active</span>
+          </div>
+          <div id="uploadGrid" class="upload-grid"></div>
+          <details class="api-proposal">
+            <summary>Backend upload API</summary>
+            <pre>POST   /inputs/{unit_id}/{stage}
+GET    /inputs/{unit_id}
+DELETE /inputs/{unit_id}/{stage}/{filename}</pre>
+          </details>
+        </section>
 
-          <footer class="page-footer">
-            <span>CUBE ROUND 3</span>
-            <span>Workflow state is derived by the orchestrator from the evidence chain.</span>
-          </footer>
-        </div>
+        <section id="evidence" class="section evidence-layout" aria-labelledby="evidenceTitle">
+          <div class="section-header">
+            <div>
+              <h2 id="evidenceTitle">Evidence trace</h2>
+              <p>Follow final outcome to contributing records, checks, refs, and input hashes.</p>
+            </div>
+            <button id="loadEvidence" class="secondary" type="button" disabled>Load evidence</button>
+          </div>
+          <div id="evidenceList" class="evidence-list empty">Evidence bundle not loaded.</div>
+        </section>
+
+        <section class="section override-section" aria-labelledby="overrideTitle">
+          <div>
+            <h2 id="overrideTitle">Human override</h2>
+            <p>Record an auditable decision change. The original evidence remains intact.</p>
+          </div>
+          <form id="overrideForm" class="override-form">
+            <label>
+              Record ID
+              <input id="recordId" name="record_id" placeholder="PRP-..." required>
+            </label>
+            <label>
+              New verdict
+              <select id="newVerdict" name="new_verdict">
+                <option>PASS</option>
+                <option>FAIL</option>
+                <option>UNCERTAIN</option>
+              </select>
+            </label>
+            <label>
+              Reason
+              <input id="overrideReason" name="reason" placeholder="Operator reviewed evidence..." required>
+            </label>
+            <button id="submitOverride" type="submit" disabled>Apply override</button>
+          </form>
+        </section>
+
+        <section id="debug" class="section" aria-labelledby="debugTitle">
+          <details open>
+            <summary id="debugTitle">Developer debug panel</summary>
+            <pre id="debugJson">{}</pre>
+          </details>
+        </section>
       </main>
     </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js"></script>
   </body>
 </html>

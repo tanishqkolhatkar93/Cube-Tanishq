@@ -1,0 +1,1 @@
+{"org_id": "org_demo_alpha", "subject_id": "UNIT-0025", "workflow_id": "WF-org_demo_alpha-UNIT-0025", "complete": true, "line_count": 1, "lines": [{"line_id": "FEE-0025-1", "charge_type": "fulfilment_fee_weight_tier", "amount_usd": "4.25", "currency": "USD", "unit_scope": "unit", "refs": {}}]}

@@ -1,0 +1,1 @@
+{"mode": "synthetic", "csv": "returns_sample.csv", "tenants": [{"organization_id": "org_demo_alpha", "client_id": null}, {"organization_id": "org_demo_bravo", "client_id": null}]}
