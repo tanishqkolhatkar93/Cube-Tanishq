@@ -30,15 +30,15 @@ ENV GIT_COMMIT=${GIT_COMMIT} \
 # use their local deterministic providers on the bundled sample data, no live model calls.
 # /health and the console label this. To use live models set the *_DEMO_MODE variables to 0
 # and provide GEMINI_API_KEY (and GEMINI_FREE_TIER_CONFIRMED=1) as host secrets.
-ENV LOG_LEVEL=INFO LOG_FORMAT=json \
+ENV LOG_LEVEL=INFO LOG_FORMAT=json OUT_DIR=out-live-demo \
     RECEIVING_DEMO_MODE=1 PREP_DEMO_MODE=1 RETURNS_DEMO_MODE=1 PACK_DEMO_MODE=1 \
-    PACK_CONFIG=data/input/pack_config.json PACK_STATE_DIR=data/input/pack \
-    PREP_CONFIG=data/input/prep_config.json PREP_STATE_DIR=data/input/prep \
-    RECOVERY_CONFIG=data/input/recovery_config.json RECOVERY_STATE_DIR=data/input/recovery \
-    RETURNS_CONFIG=data/input/returns_live_config.json RETURNS_STATE_DIR=data/input/returns_live/state \
+    PACK_CONFIG=data/input/pack_config.json PACK_STATE_DIR=out-live-demo/pack \
+    PREP_CONFIG=data/input/prep_config.json PREP_STATE_DIR=out-live-demo/prep \
+    RECOVERY_CONFIG=data/input/recovery_config.json RECOVERY_STATE_DIR=out-live-demo/recovery \
+    RETURNS_CONFIG=data/input/returns_live_config.json RETURNS_STATE_DIR=out-live-demo/returns \
     RECEIVING_GEMINI_MODEL=gemini-3.8-flash RECEIVING_TIMEOUT_S=45 \
     RECEIVING_CAPTURE_REGISTRY=agents/receiving/fixtures/captures.json \
-    RECEIVING_STATE_DIR=out/receiving RECEIVING_CACHE_DIR=out/receiving-cache
+    RECEIVING_STATE_DIR=out-live-demo/receiving RECEIVING_CACHE_DIR=out-live-demo/receiving-cache
 
 USER app
 EXPOSE 8100

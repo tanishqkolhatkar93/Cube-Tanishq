@@ -1,0 +1,26 @@
+.git
+.github
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.pytest-tmp*
+out
+out-live-demo
+.env
+.env.*
+!.env.example
+node_modules
+tests
+docs
+*.md
+!README.md
+
+# Mutable runtime request state (not source data). Deployments start with empty stores; the agents
+# recreate them. Shipping these makes replays conflict, because stored fingerprints embed timestamps
+# from the original runs. data/input/returns_live/source.sqlite3 is source data and DOES ship.
+data/input/pack/pack.sqlite3
+data/input/prep/prep-requests.sqlite3
+data/input/recovery/recovery.sqlite3
+data/input/returns_live/state
