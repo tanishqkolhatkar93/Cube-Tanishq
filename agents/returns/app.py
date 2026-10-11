@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 from .adapter import Adapter
+from .reference_config import from_env as reference_from_env
 from .request_store import Rejected
 
 
@@ -18,7 +19,9 @@ def configured_adapter():
         raise RuntimeError("returns_configuration_required")
     path = Path(filename).resolve()
     config = json.loads(path.read_text(encoding="utf-8"))
-    return Adapter(config, path.parent, Path(state).resolve())
+    reference_store, reference_comparer = reference_from_env()
+    return Adapter(config, path.parent, Path(state).resolve(),
+                   reference_store=reference_store, reference_comparer=reference_comparer)
 
 
 def handle(request):
