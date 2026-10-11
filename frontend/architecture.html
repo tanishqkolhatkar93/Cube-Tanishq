@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="CUBE Operations technical architecture for five-agent ecommerce orchestration.">
+    <title>CUBE Operations - Technical Architecture</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("cube_theme");
+          document.documentElement.dataset.theme = saved || "light";
+        } catch (e) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12L4 7.5M12 12v9"/></symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+        <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7"/><path d="M8.5 6h4a3 3 0 0 1 3 3v.5"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
+      </defs>
+    </svg>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary">
+        <a class="brand" href="/" aria-label="CUBE Operations home">
+          <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-cube"/></svg></span>
+          <span class="brand-text"><strong>CUBE Operations</strong><span>Architecture</span></span>
+        </a>
+        <nav class="nav" aria-label="Pages">
+          <a href="/" class="nav-item"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>Console</span></a>
+          <a href="/business.html" class="nav-item"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg><span>Business case</span></a>
+          <a href="/architecture.html" class="nav-item active"><svg class="icon" aria-hidden="true"><use href="#i-flow"/></svg><span>Architecture</span></a>
+          <a href="/guide.html" class="nav-item"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><span>User guide</span></a>
+        </nav>
+      </aside>
+
+      <div class="main-col">
+        <header class="topbar page-hero">
+          <div>
+            <p class="eyebrow">Technical architecture</p>
+            <h1>Five agents working together as one multi-agent ecommerce system</h1>
+            <p class="lede">The orchestrator is the traffic controller. Each agent solves one specialist task, returns evidence, and the final outcome is derived from the full chain.</p>
+          </div>
+          <a class="btn btn-primary" href="/#run"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Run demo</a>
+        </header>
+
+        <main class="workspace page-workspace">
+          <section class="routing-board" aria-label="Orchestrator routing decision diagram">
+            <div class="route-center">
+              <span class="case-icon"><svg class="icon" aria-hidden="true"><use href="#i-flow"/></svg></span>
+              <p class="eyebrow">Orchestrator</p>
+              <h2>Reads the case and decides which agents run</h2>
+              <p>The user gives one unit ID, route and return status. The orchestrator turns that into a safe agent path.</p>
+            </div>
+            <div class="route-input">
+              <strong>Input Case</strong>
+              <span>unit_id</span>
+              <span>route: FBA or MFN</span>
+              <span>returned: yes or no</span>
+              <span>registered files</span>
+            </div>
+            <div class="route-rules">
+              <article><strong>If route = FBA</strong><span>Run Prep</span><em>Skip Pack</em></article>
+              <article><strong>If route = MFN</strong><span>Run Pack</span><em>Skip Prep</em></article>
+              <article><strong>If returned = yes</strong><span>Run Returns</span><em>If no, skip Returns</em></article>
+              <article><strong>If fees exist</strong><span>Run Recovery</span><em>Use previous evidence</em></article>
+            </div>
+          </section>
+
+          <section class="route-diagrams" aria-label="FBA MFN and returns routing diagrams">
+            <div class="section-head">
+              <div>
+                <h2>Routing Diagrams</h2>
+                <p>How the same orchestrator chooses different agent paths for FBA, MFN and returned units.</p>
+              </div>
+            </div>
+            <article class="route-path">
+              <div class="route-title"><strong>FBA path</strong><span>Amazon fulfilled inventory</span></div>
+              <ol>
+                <li class="is-run"><span>1</span><strong>Receiving</strong><small>Run</small></li>
+                <li class="is-run"><span>2</span><strong>Prep</strong><small>Run: FBA needs labels and prep rules</small></li>
+                <li class="is-skip"><span>3</span><strong>Pack</strong><small>Skip: Amazon fulfillment does packing later</small></li>
+                <li class="is-conditional"><span>4</span><strong>Returns</strong><small>Run only if returned = yes</small></li>
+                <li class="is-run"><span>5</span><strong>Recovery</strong><small>Run if fee report exists</small></li>
+              </ol>
+            </article>
+            <article class="route-path">
+              <div class="route-title"><strong>MFN path</strong><span>Merchant fulfilled by seller</span></div>
+              <ol>
+                <li class="is-run"><span>1</span><strong>Receiving</strong><small>Run</small></li>
+                <li class="is-skip"><span>2</span><strong>Prep</strong><small>Skip: no FBA prep required</small></li>
+                <li class="is-run"><span>3</span><strong>Pack</strong><small>Run: seller must pack and ship</small></li>
+                <li class="is-conditional"><span>4</span><strong>Returns</strong><small>Run only if returned = yes</small></li>
+                <li class="is-run"><span>5</span><strong>Recovery</strong><small>Run if fee report exists</small></li>
+              </ol>
+            </article>
+            <article class="route-path">
+              <div class="route-title"><strong>Not returned</strong><span>Clean forward flow</span></div>
+              <ol>
+                <li class="is-run"><span>1</span><strong>Receiving</strong><small>Run</small></li>
+                <li class="is-conditional"><span>2</span><strong>Prep or Pack</strong><small>Chosen from route</small></li>
+                <li class="is-skip"><span>3</span><strong>Returns</strong><small>Skip: no return event</small></li>
+                <li class="is-run"><span>4</span><strong>Recovery</strong><small>Checks fees if present</small></li>
+              </ol>
+            </article>
+          </section>
+
+          <section class="solution-map" aria-label="How orchestration happens">
+            <div class="section-head">
+              <div>
+                <h2>How AI Orchestration Happens</h2>
+                <p>Simple version: the orchestrator never guesses. It asks the right agent, checks the response, then passes trusted evidence forward.</p>
+              </div>
+            </div>
+            <div class="solution-steps">
+              <article><span>01</span><h3>Choose route</h3><p>The workflow reads the case: FBA uses Prep, MFN uses Pack, returned items use Returns.</p></article>
+              <article><span>02</span><h3>Call agent</h3><p>The orchestrator sends a strict request with unit, org, inputs and previous evidence.</p></article>
+              <article><span>03</span><h3>Validate evidence</h3><p>Agent output must match schema, tenant, subject, hashes and allowed references.</p></article>
+              <article><span>04</span><h3>Derive outcome</h3><p>The final result is calculated from evidence and overrides, not from hidden UI state.</p></article>
+            </div>
+          </section>
+
+          <section class="agent-contract" aria-label="Agent contract diagram">
+            <div class="section-head">
+              <div>
+                <h2>How One Agent Call Works</h2>
+                <p>Every agent follows the same contract, so five separate agents behave like one system.</p>
+              </div>
+            </div>
+            <div class="contract-flow">
+              <article><strong>1. Request</strong><span>Orchestrator sends org, unit, stage, inputs and previous evidence.</span></article>
+              <article><strong>2. Specialist agent</strong><span>Agent checks only its domain: Receiving, Prep, Pack, Returns or Recovery.</span></article>
+              <article><strong>3. Evidence record</strong><span>Agent returns verdict, reason, checks, refs, hashes and next action.</span></article>
+              <article><strong>4. Validation</strong><span>Orchestrator validates schema, tenant, subject and evidence references.</span></article>
+              <article><strong>5. Next stage</strong><span>Validated evidence is passed forward to the next agent.</span></article>
+            </div>
+          </section>
+
+          <section class="live-sequence" aria-label="Real-time orchestrator communication diagram">
+            <div class="section-head">
+              <div>
+                <h2>Real-Time Communication Flow</h2>
+                <p>What happens after the user clicks Run workflow. The browser talks only to the orchestrator; the orchestrator talks to the agents.</p>
+              </div>
+            </div>
+            <div class="sequence-rail">
+              <article>
+                <span>01</span>
+                <strong>User clicks Run</strong>
+                <p>Frontend sends unit ID, route and returned status to <code>POST /workflows</code>.</p>
+              </article>
+              <article>
+                <span>02</span>
+                <strong>Orchestrator creates state</strong>
+                <p>It opens or creates one workflow and marks it in progress.</p>
+              </article>
+              <article>
+                <span>03</span>
+                <strong>Route decision</strong>
+                <p>It decides which stages run: FBA uses Prep, MFN uses Pack, Returns runs only for returned units.</p>
+              </article>
+              <article>
+                <span>04</span>
+                <strong>Agent call</strong>
+                <p>It sends a strict request to the selected agent with current inputs and previous evidence.</p>
+              </article>
+              <article>
+                <span>05</span>
+                <strong>Evidence returned</strong>
+                <p>The agent replies with verdict, checks, reason, references, hashes and next-step advice.</p>
+              </article>
+              <article>
+                <span>06</span>
+                <strong>Validate and continue</strong>
+                <p>The orchestrator validates the response, stores it, then passes it to the next agent.</p>
+              </article>
+              <article>
+                <span>07</span>
+                <strong>Final outcome</strong>
+                <p>After all required stages, it derives clean, incomplete, review needed or claim recommended.</p>
+              </article>
+              <article>
+                <span>08</span>
+                <strong>UI updates</strong>
+                <p>The frontend renders the outcome card, timeline and evidence trace for the operator.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="data-flow" aria-label="Data flow">
+            <div class="section-head">
+              <div>
+                <h2>Data Flow In Plain English</h2>
+                <p>What moves through the system during a run.</p>
+              </div>
+            </div>
+            <div class="flow-lanes">
+              <article><strong>1. Inputs</strong><span>Photos, CSVs and JSON reports are registered to the selected unit.</span></article>
+              <article><strong>2. Agent evidence</strong><span>Each manager returns verdict, reason, checks, refs and hash-backed records.</span></article>
+              <article><strong>3. Workflow state</strong><span>The orchestrator stores stage state: completed, skipped, blocked or error.</span></article>
+              <article><strong>4. Final outcome</strong><span>CUBE shows claim recommended, clean, incomplete or needs review.</span></article>
+            </div>
+          </section>
+
+          <section class="arch-safety" aria-label="Why the architecture is safe">
+            <article><span><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><strong>Tenant scoped</strong><p>Workflows and records belong to one organization context.</p></article>
+            <article><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><strong>Evidence first</strong><p>Every decision has traceable checks and source references.</p></article>
+            <article><span><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg></span><strong>Separate roles</strong><p>Each agent owns one ecommerce domain, making the system easier to debug.</p></article>
+            <article><span><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg></span><strong>Auditable override</strong><p>Humans can correct a decision without deleting the original evidence.</p></article>
+          </section>
+
+          <section class="tech-stack" aria-label="Implementation stack">
+            <div class="section-head">
+              <div>
+                <h2>Implementation Stack</h2>
+                <p>What is running in the demo.</p>
+              </div>
+            </div>
+            <div class="metric-grid">
+              <article><span class="metric-value">FastAPI</span><strong>API and frontend server</strong><p>Serves the console, auth session, workflow APIs and health checks.</p></article>
+              <article><span class="metric-value">File store</span><strong>Local durable demo state</strong><p>Workflows and evidence write to <code>out-live-demo</code>.</p></article>
+              <article><span class="metric-value">Schema</span><strong>Strict contracts</strong><p>Agent input, output, evidence and workflow state are validated.</p></article>
+              <article><span class="metric-value">Demo mode</span><strong>Stable live demo</strong><p>Local deterministic providers avoid network surprises during judging.</p></article>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

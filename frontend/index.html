@@ -3,204 +3,384 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="CUBE Operations: one evidence-backed commerce workflow across five agent managers.">
     <title>CUBE Operations</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l8 4.5v9L12 21l-8-4.5v-9z' fill='%230f766e'/%3E%3C/svg%3E">
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("cube_theme");
+          var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+        } catch (e) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12L4 7.5M12 12v9"/></symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
+        <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7"/><path d="M8.5 6h4a3 3 0 0 1 3 3v.5"/></symbol>
+        <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+        <symbol id="i-evidence" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 14h6M9 17h4"/></symbol>
+        <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.5v.01"/></symbol>
+        <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.5L20 16"/><path d="M20 20v-4h-4"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M5 19l1.4-1.4M17.6 6.4L19 5"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"/></symbol>
+        <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4M20 12H9"/></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></symbol>
+        <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M4 13l2.5-7.5A2 2 0 0 1 8.4 4h7.2a2 2 0 0 1 1.9 1.5L20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 13h5l1 2h4l1-2h5"/></symbol>
+        <symbol id="i-bug" viewBox="0 0 24 24"><path d="M8 8h8v6a4 4 0 0 1-8 0z"/><path d="M12 8V5M5 12h3M16 12h3M6 19l2-2M18 19l-2-2"/></symbol>
+      </defs>
+    </svg>
+
     <div class="app-shell">
-      <aside class="sidebar" aria-label="Primary navigation">
-        <div class="brand">
-          <div class="brand-mark">C</div>
-          <div>
+      <aside class="sidebar" aria-label="Primary">
+        <a class="brand" href="#overview" aria-label="CUBE Operations, home">
+          <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-cube"/></svg></span>
+          <span class="brand-text">
             <strong>CUBE Operations</strong>
             <span>Five agent managers</span>
-          </div>
-        </div>
-        <nav class="nav-list">
-          <a href="#workflow" class="nav-item active">Workflow</a>
-          <a href="#uploads" class="nav-item">Uploads</a>
-          <a href="#evidence" class="nav-item">Evidence</a>
-          <a href="#debug" class="nav-item">Debug</a>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Sections">
+          <a href="#overview" class="nav-item" data-spy="overview"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>Overview</span></a>
+          <a href="#run" class="nav-item" data-spy="run" data-auth><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span>Run workflow</span></a>
+          <a href="#workflow" class="nav-item" data-spy="workflow" data-auth><svg class="icon" aria-hidden="true"><use href="#i-flow"/></svg><span>Workflow</span></a>
+          <a href="#uploads" class="nav-item" data-spy="uploads" data-auth><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span>Stage inputs</span></a>
+          <a href="#evidence" class="nav-item" data-spy="evidence" data-auth><svg class="icon" aria-hidden="true"><use href="#i-evidence"/></svg><span>Evidence</span></a>
+          <a href="#override" class="nav-item" data-spy="override" data-auth><svg class="icon" aria-hidden="true"><use href="#i-edit"/></svg><span>Override</span></a>
+          <a href="/business.html" class="nav-item"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg><span>Business case</span></a>
+          <a href="/architecture.html" class="nav-item"><svg class="icon" aria-hidden="true"><use href="#i-flow"/></svg><span>Architecture</span></a>
+          <a href="/guide.html" class="nav-item"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><span>User guide</span></a>
         </nav>
-        <div class="sidebar-note">
-          <strong>Local console</strong>
-          <span>Same-origin API. Session token stays server-side in an HttpOnly cookie.</span>
+
+        <div class="sidebar-foot">
+          <p id="buildInfo" class="build-info" title="Deployed build"></p>
+          <div id="sessionCard" class="session-card hidden">
+            <span class="avatar" id="avatar" aria-hidden="true">?</span>
+            <div class="session-text">
+              <strong id="sessionActor">-</strong>
+              <span id="sessionOrg">-</span>
+            </div>
+            <button id="signOut" class="icon-btn on-dark" type="button" title="Sign out" aria-label="Sign out"><svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg></button>
+          </div>
+          <button id="themeToggle" class="btn btn-ghost on-dark theme-toggle" type="button" aria-label="Switch colour theme">
+            <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+            <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+            <span class="theme-label">Theme</span>
+          </button>
         </div>
       </aside>
 
-      <main class="workspace">
+      <div class="main-col">
         <header class="topbar">
-          <div>
-            <p class="eyebrow">Round 3 Pod Integration</p>
+          <div class="topbar-title">
+            <p class="eyebrow">Round 3 pod integration</p>
             <h1>Unified commerce workflow</h1>
-            <p class="top-subtitle">One orchestrated chain from Receiving to Final Commerce Outcome, with evidence and uncertainty visible.</p>
+            <p class="lede">Receiving to final commerce outcome, with the evidence behind every decision and every uncertainty in plain view.</p>
           </div>
-          <div class="top-actions">
-            <button id="refreshHealth" class="icon-button" title="Refresh health" aria-label="Refresh health">↻</button>
-            <button id="signOut" class="secondary hidden">Sign out</button>
+          <div class="topbar-actions">
+            <span id="flowBadge" class="pill tone-mute"><span class="dot"></span>Checking…</span>
+            <button id="refreshHealth" class="icon-btn" type="button" title="Refresh health" aria-label="Refresh health"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></button>
           </div>
         </header>
 
-        <section id="sessionPanel" class="section auth-section">
-          <div>
-            <h2>Sign in</h2>
-            <p>Use the local organization token configured in `.env`.</p>
-          </div>
-          <form id="loginForm" class="auth-form">
-            <label>
-              Organization
-              <select id="orgId" name="org_id">
-                <option value="org_demo_alpha">org_demo_alpha</option>
-                <option value="org_demo_bravo">org_demo_bravo</option>
-              </select>
-            </label>
-            <label>
-              Organization access token
-              <input id="token" name="token" type="password" autocomplete="off" placeholder="alpha-local-token">
-            </label>
-            <button type="submit">Sign in</button>
-          </form>
-          <p id="sessionMessage" class="message"></p>
-        </section>
+        <main id="main" class="workspace" tabindex="-1">
 
-        <section class="section" aria-labelledby="healthTitle">
-          <div class="section-header">
-            <div>
-              <h2 id="healthTitle">System health</h2>
-              <p id="healthSummary">Checking orchestrator and agent status...</p>
+          <!-- Signed-out gate -->
+          <section id="gate" class="gate" aria-labelledby="gateTitle">
+            <div class="gate-copy">
+              <p class="eyebrow">Operator access</p>
+              <h2 id="gateTitle">Sign in to run and audit workflows</h2>
+              <ul class="gate-points">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span><strong>Tenant-scoped.</strong> Every workflow, input and record belongs to your organization only.</span></li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg><span><strong>Evidence first.</strong> Each stage leaves a verifiable record. Failures are recorded, never hidden.</span></li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-edit"/></svg><span><strong>Human in control.</strong> Overrides are audited and the original evidence stays intact.</span></li>
+              </ul>
             </div>
-            <span id="flowBadge" class="status-pill neutral">flow unknown</span>
-          </div>
-          <div id="agentGrid" class="agent-grid"></div>
-        </section>
-
-        <section class="section demo-strip" aria-labelledby="demoTitle">
-          <div>
-            <p class="eyebrow">Handbook demo path</p>
-            <h2 id="demoTitle">One connected system, not five separate demos</h2>
-          </div>
-          <div class="demo-points">
-            <span>Unified workflow</span>
-            <span>Agent evidence</span>
-            <span>Final outcome</span>
-            <span>Overrides</span>
-          </div>
-        </section>
-
-        <section id="workflow" class="section workflow-grid" aria-labelledby="workflowTitle">
-          <div class="panel">
-            <div class="section-header compact">
-              <div>
-                <h2 id="workflowTitle">Create workflow</h2>
-                <p>Run a unit through Receiving, Prep or Pack, Returns, Recovery, and the final outcome.</p>
-              </div>
-            </div>
-            <form id="workflowForm" class="workflow-form">
-              <label>
-                Unit ID
-                <input id="unitId" name="unit_id" value="UNIT-0014" required>
-              </label>
-              <label>
-                Route
-                <select id="route" name="route">
-                  <option value="">Auto from sample data</option>
-                  <option value="fba">FBA - Prep route</option>
-                  <option value="mfn">MFN - Pack route</option>
-                  <option value="unknown">Unknown</option>
+            <form id="loginForm" class="card gate-form" novalidate>
+              <h3>Sign in</h3>
+              <label class="field">
+                <span>Organization</span>
+                <select id="orgId" name="org_id">
+                  <option value="org_demo_alpha">org_demo_alpha</option>
+                  <option value="org_demo_bravo">org_demo_bravo</option>
                 </select>
               </label>
-              <label class="switch-row">
-                <input id="returned" name="returned" type="checkbox" checked>
-                <span>Returned item</span>
+              <label class="field">
+                <span>Access token</span>
+                <input id="token" name="token" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your organization token" required>
               </label>
-              <button id="runWorkflow" type="submit">Run workflow</button>
+              <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">Sign in</button>
+              <p id="sessionMessage" class="form-error" role="alert"></p>
+              <p class="fineprint"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>The token is set in <code>.env</code>. Your session lives in an HttpOnly cookie, never in the page.</span></p>
             </form>
-            <div class="recent-box">
-              <div class="mini-header">
-                <strong>Recent workflows</strong>
-                <button id="clearRecent" class="link-button" type="button">Clear</button>
-              </div>
-              <div id="recentWorkflows" class="recent-list empty">No recent workflows in this browser.</div>
-            </div>
-          </div>
+          </section>
 
-          <div class="panel">
-            <div class="section-header compact">
+          <!-- Health (public) -->
+          <section id="overview" class="section" aria-labelledby="healthTitle">
+            <div class="section-head">
               <div>
-                <h2>Current workflow</h2>
-                <p id="workflowSummary">No workflow loaded.</p>
+                <h2 id="healthTitle">System health</h2>
+                <p id="healthSummary">Checking orchestrator and agent status…</p>
               </div>
-              <button id="resumeWorkflow" class="secondary" type="button" disabled>Resume</button>
             </div>
-            <div id="timeline" class="timeline empty">Run or load a workflow to see the five-stage timeline.</div>
-            <div id="outcomePanel" class="outcome empty">Final outcome will appear here.</div>
-            <div id="demoReadiness" class="demo-readiness"></div>
-          </div>
-        </section>
-
-        <section id="uploads" class="section" aria-labelledby="uploadsTitle">
-          <div class="section-header">
-            <div>
-              <h2 id="uploadsTitle">Stage inputs</h2>
-              <p>Upload captures and documents into the local input store before running a workflow. Analysis still comes only from the agents.</p>
+            <div class="demo-brief" aria-label="Live demonstration focus">
+              <article class="brief-card brief-lead">
+                <span class="brief-icon"><svg class="icon" aria-hidden="true"><use href="#i-flow"/></svg></span>
+                <div>
+                  <p class="eyebrow">Live judge path</p>
+                  <h3>Show one customer problem becoming an audited commerce decision</h3>
+                  <p>Start with an FBA returned unit, follow the five managers, inspect evidence, then apply a human override to prove control.</p>
+                </div>
+              </article>
+              <article class="brief-card">
+                <span class="brief-icon"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg></span>
+                <strong>Business fit</strong>
+                <span>FBA, MFN, returns and recovery are handled in one operator surface.</span>
+              </article>
+              <article class="brief-card">
+                <span class="brief-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+                <strong>MVP readiness</strong>
+                <span>Tenant sign-in, uploads, resume, evidence trace and audited overrides are wired.</span>
+              </article>
+              <article class="brief-card">
+                <span class="brief-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+                <strong>Impact story</strong>
+                <span>Fewer manual checks, clearer claim recovery, and visible uncertainty.</span>
+              </article>
             </div>
-            <span class="status-pill ok">upload API active</span>
-          </div>
-          <div id="uploadGrid" class="upload-grid"></div>
-          <details class="api-proposal">
-            <summary>Backend upload API</summary>
-            <pre>POST   /inputs/{unit_id}/{stage}
-GET    /inputs/{unit_id}
-DELETE /inputs/{unit_id}/{stage}/{filename}</pre>
-          </details>
-        </section>
-
-        <section id="evidence" class="section evidence-layout" aria-labelledby="evidenceTitle">
-          <div class="section-header">
-            <div>
-              <h2 id="evidenceTitle">Evidence trace</h2>
-              <p>Follow final outcome to contributing records, checks, refs, and input hashes.</p>
+            <div class="business-story" aria-label="Business problem and solution">
+              <article class="story-panel story-problem">
+                <p class="eyebrow">Business problem</p>
+                <h3>Amazon sellers lose time and money when FBA, MFN, returns and recovery decisions live in separate tools.</h3>
+                <div class="story-grid">
+                  <div>
+                    <strong>User</strong>
+                    <span>Operations associate reviewing units, photos, labels, returns and reimbursement reports.</span>
+                  </div>
+                  <div>
+                    <strong>Customer</strong>
+                    <span>Ecommerce seller or warehouse team that needs fast, auditable decisions.</span>
+                  </div>
+                  <div>
+                    <strong>Pain</strong>
+                    <span>Manual handoffs, unclear evidence, missed claims, duplicate checks and hidden uncertainty.</span>
+                  </div>
+                </div>
+              </article>
+              <article class="story-panel">
+                <p class="eyebrow">How we solve it</p>
+                <ul class="story-list">
+                  <li><span>1</span><p><strong>Route the unit.</strong> FBA goes through Prep, MFN goes through Pack, returns go to Returns, and fees go to Recovery.</p></li>
+                  <li><span>2</span><p><strong>Make every agent accountable.</strong> Each manager produces its own evidence record with verdict, reason, refs and hashes.</p></li>
+                  <li><span>3</span><p><strong>Show the business outcome first.</strong> Operators see clean, review, blocked or claim recommended before opening details.</p></li>
+                  <li><span>4</span><p><strong>Keep humans in control.</strong> Overrides are audited; original evidence remains intact.</p></li>
+                </ul>
+              </article>
             </div>
-            <button id="loadEvidence" class="secondary" type="button" disabled>Load evidence</button>
-          </div>
-          <div id="evidenceList" class="evidence-list empty">Evidence bundle not loaded.</div>
-        </section>
+            <div class="agent-roles" aria-label="Agent roles in ecommerce workflow">
+              <article class="role-card">
+                <span class="role-num">01</span>
+                <h3>Receiving</h3>
+                <p>Checks inbound cartons, unit identity and visible damage before downstream work starts.</p>
+              </article>
+              <article class="role-card">
+                <span class="role-num">02</span>
+                <h3>Prep</h3>
+                <p>Handles FBA readiness: labels, barcode coverage, handling requirements and compliance.</p>
+              </article>
+              <article class="role-card">
+                <span class="role-num">03</span>
+                <h3>Pack</h3>
+                <p>Handles MFN seller-fulfilled packaging and shipment readiness when the route is not FBA.</p>
+              </article>
+              <article class="role-card">
+                <span class="role-num">04</span>
+                <h3>Returns</h3>
+                <p>Grades returned items and decides whether the unit can be resold or needs review.</p>
+              </article>
+              <article class="role-card role-impact">
+                <span class="role-num">05</span>
+                <h3>Recovery</h3>
+                <p>Compares fees against upstream evidence and flags claimable Amazon reimbursements.</p>
+              </article>
+            </div>
+            <div class="impact-strip" aria-label="Potential impact">
+              <div><strong>Faster ops</strong><span>One workflow instead of disconnected checks.</span></div>
+              <div><strong>Fewer mistakes</strong><span>Evidence-bound uploads and tenant-scoped records.</span></div>
+              <div><strong>More recoveries</strong><span>Claimable fees are surfaced with reasons.</span></div>
+              <div><strong>MVP ready</strong><span>Auth, run, evidence, upload, resume and override are wired.</span></div>
+            </div>
+            <div id="agentGrid" class="agent-grid" aria-live="polite"></div>
+          </section>
 
-        <section class="section override-section" aria-labelledby="overrideTitle">
-          <div>
-            <h2 id="overrideTitle">Human override</h2>
-            <p>Record an auditable decision change. The original evidence remains intact.</p>
-          </div>
-          <form id="overrideForm" class="override-form">
-            <label>
-              Record ID
-              <input id="recordId" name="record_id" placeholder="PRP-..." required>
-            </label>
-            <label>
-              New verdict
-              <select id="newVerdict" name="new_verdict">
-                <option>PASS</option>
-                <option>FAIL</option>
-                <option>UNCERTAIN</option>
-              </select>
-            </label>
-            <label>
-              Reason
-              <input id="overrideReason" name="reason" placeholder="Operator reviewed evidence..." required>
-            </label>
-            <button id="submitOverride" type="submit" disabled>Apply override</button>
-          </form>
-        </section>
+          <div id="authed" class="authed hidden">
 
-        <section id="debug" class="section" aria-labelledby="debugTitle">
-          <details open>
-            <summary id="debugTitle">Developer debug panel</summary>
-            <pre id="debugJson">{}</pre>
-          </details>
-        </section>
-      </main>
+            <section id="run" class="section" aria-labelledby="runTitle">
+              <div class="section-head">
+                <div>
+                  <h2 id="runTitle">Run a workflow</h2>
+                  <p>Send one unit through Receiving, Prep or Pack, Returns, Recovery and the final outcome.</p>
+                </div>
+              </div>
+              <div class="run-grid">
+                <div class="card">
+                  <h3 class="card-title">Demo units</h3>
+                  <div class="demo-units" role="group" aria-label="Demo units">
+                    <button type="button" class="demo-unit is-selected" data-demo-unit="UNIT-0014" data-demo-route="fba" data-demo-returned="true"><strong>UNIT-0014</strong><span>FBA · returned · full path</span></button>
+                    <button type="button" class="demo-unit" data-demo-unit="UNIT-9003" data-demo-route="fba" data-demo-returned="false"><strong>UNIT-9003</strong><span>FBA · clean</span></button>
+                    <button type="button" class="demo-unit" data-demo-unit="UNIT-9004" data-demo-route="mfn" data-demo-returned="false"><strong>UNIT-9004</strong><span>MFN · pack route</span></button>
+                    <button type="button" class="demo-unit" data-demo-unit="UNIT-9005" data-demo-route="mfn" data-demo-returned="false"><strong>UNIT-9005</strong><span>MFN · backup</span></button>
+                  </div>
+                  <form id="workflowForm" class="run-form" novalidate>
+                    <label class="field">
+                      <span>Unit ID</span>
+                      <input id="unitId" name="unit_id" value="UNIT-0014" autocomplete="off" spellcheck="false" required>
+                    </label>
+                    <label class="field">
+                      <span>Route</span>
+                      <select id="route" name="route">
+                        <option value="">Auto from sample data</option>
+                        <option value="fba" selected>FBA · Prep route</option>
+                        <option value="mfn">MFN · Pack route</option>
+                        <option value="unknown">Unknown</option>
+                      </select>
+                    </label>
+                    <label class="check">
+                      <input id="returned" name="returned" type="checkbox" checked>
+                      <span>This unit was returned</span>
+                    </label>
+                    <button id="runWorkflow" class="btn btn-primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Run workflow</button>
+                  </form>
+                </div>
+
+                <div class="card demo-script">
+                  <div class="card-title-row">
+                    <h3 class="card-title">2-minute judging script</h3>
+                    <span class="pill tone-accent"><span class="dot"></span>Demo ready</span>
+                  </div>
+                  <ol class="script-steps">
+                    <li><span>1</span><p><strong>Customer problem</strong> Pick <button class="link-btn inline-link" type="button" data-demo-unit="UNIT-0014" data-demo-route="fba" data-demo-returned="true">UNIT-0014</button>: an FBA returned unit that needs receiving, prep, returns and recovery decisions.</p></li>
+                    <li><span>2</span><p><strong>Automation</strong> Run the workflow and point to the stage timeline: FBA goes through Prep, MFN goes through Pack.</p></li>
+                    <li><span>3</span><p><strong>Trust</strong> Open Evidence trace and show confidence, reasons, source refs and input hashes.</p></li>
+                    <li><span>4</span><p><strong>Control</strong> Use Override to show a human can change a verdict without deleting the original record.</p></li>
+                  </ol>
+                </div>
+
+                <div class="card">
+                  <div class="card-title-row">
+                    <h3 class="card-title">Recent workflows</h3>
+                    <button id="clearRecent" class="link-btn" type="button">Clear</button>
+                  </div>
+                  <div id="recentWorkflows" class="recent-list"></div>
+                </div>
+              </div>
+            </section>
+
+            <section id="workflow" class="section" aria-labelledby="workflowTitle">
+              <div class="section-head">
+                <div>
+                  <h2 id="workflowTitle">Current workflow</h2>
+                  <p id="workflowSummary">No workflow loaded.</p>
+                </div>
+                <div class="head-actions">
+                  <button id="resumeWorkflow" class="btn btn-secondary" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Resume</button>
+                </div>
+              </div>
+              <div id="outcomePanel" class="outcome-wrap"></div>
+              <div id="timeline" class="timeline-wrap"></div>
+              <div id="stageDetail" class="stage-detail" aria-live="polite"></div>
+            </section>
+
+            <section id="uploads" class="section" aria-labelledby="uploadsTitle">
+              <div class="section-head">
+                <div>
+                  <h2 id="uploadsTitle">Stage inputs</h2>
+                  <p>Stage captures and documents for a unit before running it. Analysis comes only from the agents.</p>
+                </div>
+                <span class="pill tone-accent" id="uploadTarget"><span class="dot"></span>Target: UNIT-0014</span>
+              </div>
+              <div id="uploadGrid" class="upload-grid"></div>
+            </section>
+
+            <section id="evidence" class="section" aria-labelledby="evidenceTitle">
+              <div class="section-head">
+                <div>
+                  <h2 id="evidenceTitle">Evidence trace</h2>
+                  <p>Follow the final outcome back to its records, checks, references and input hashes.</p>
+                </div>
+                <div class="head-actions">
+                  <button id="loadEvidence" class="btn btn-secondary" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#i-evidence"/></svg>Load evidence</button>
+                </div>
+              </div>
+              <div id="evidenceList" class="evidence-list"></div>
+            </section>
+
+            <section id="override" class="section" aria-labelledby="overrideTitle">
+              <div class="section-head">
+                <div>
+                  <h2 id="overrideTitle">Human override</h2>
+                  <p>Record an auditable decision change. The original evidence stays intact and your name is logged.</p>
+                </div>
+              </div>
+              <form id="overrideForm" class="card override-form" novalidate>
+                <label class="field">
+                  <span>Record</span>
+                  <select id="recordId" name="record_id" required disabled>
+                    <option value="">Run or load a workflow first</option>
+                  </select>
+                </label>
+                <fieldset class="field verdicts">
+                  <legend>New verdict</legend>
+                  <label class="seg"><input type="radio" name="new_verdict" value="PASS" checked><span>Pass</span></label>
+                  <label class="seg"><input type="radio" name="new_verdict" value="FAIL"><span>Fail</span></label>
+                  <label class="seg"><input type="radio" name="new_verdict" value="UNCERTAIN"><span>Uncertain</span></label>
+                </fieldset>
+                <label class="field field-wide">
+                  <span>Reason</span>
+                  <textarea id="overrideReason" name="reason" rows="2" placeholder="What did you review, and why does the verdict change?" required></textarea>
+                </label>
+                <div class="form-actions">
+                  <button id="submitOverride" class="btn btn-primary" type="submit" disabled>Apply override</button>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <section id="debug" class="section section-quiet">
+            <details>
+              <summary><svg class="icon" aria-hidden="true"><use href="#i-bug"/></svg>Developer debug panel</summary>
+              <div class="debug-actions"><button id="copyDebug" class="btn btn-ghost btn-sm" type="button"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Copy JSON</button></div>
+              <pre id="debugJson">{}</pre>
+            </details>
+          </section>
+        </main>
+      </div>
     </div>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div id="toasts" class="toasts" aria-live="polite"></div>
     <script src="/app.js"></script>
   </body>
 </html>
