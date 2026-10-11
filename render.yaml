@@ -1,0 +1,24 @@
+# Render Blueprint: one Docker web service (orchestrator + 5 agents + console).
+# Render -> New -> Blueprint -> pick this repo. Tenant tokens are generated for you;
+# read them in the dashboard under Environment, then use them to sign in.
+services:
+  - type: web
+    name: cube-operations
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: ORG_ALPHA_TOKEN
+        generateValue: true
+      - key: ORG_BRAVO_TOKEN
+        generateValue: true
+      - key: APP_VERSION
+        value: "1.0.0"
+      # Optional model-provider keys; set only the ones your agents use.
+      - key: GEMINI_API_KEY
+        sync: false
+    # Free web services have an ephemeral disk: runs and uploads reset on each deploy and
+    # after sleeping. For persistence use a paid plan and mount a disk, e.g.
+    #   disk: { name: cube-data, mountPath: /app/out, sizeGB: 1 }
+    # and set OUT_DIR=/app/out. See DEPLOYMENT.md.
