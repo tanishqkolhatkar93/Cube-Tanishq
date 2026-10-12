@@ -124,12 +124,6 @@ data/input/ (yours) · data/sample/ (Round 2 synthetic CSVs) · data/expected/ (
 examples/{happy-path,uncertain-path,failure-path,end-to-end}/      tests/{integration,e2e}/      docs/{build-log,decisions}.md
 ```
 
-## Submission overview
-
-Your Pod's final repository (tagged), a working integrated system, documentation and architecture, a demo, a deployment URL if applicable, evaluation and testing evidence, and the LinkedIn post URL. The literal checklist, the process and the finality rules are in [`SUBMISSION-GUIDE.md`](SUBMISSION-GUIDE.md). Dates and the submission form are **TBA**.
-
----
-
 ## Builder - 
 
 Name - Tanishq Kolhatkar
