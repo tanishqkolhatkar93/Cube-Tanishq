@@ -128,4 +128,14 @@ Your Pod's final repository (tagged), a working integrated system, documentation
 
 ---
 
+## Author - 
+
+Name - Tanishq Kolhatkar
+
+Mail Id - tanishqkolhatkar93@gmail.com
+
+Linkedln - https://www.linkedin.com/in/tanishq93/?isSelfProfile=true
+
+
+
 *CUBE Buildathon · Commerce Context · Round 3*
