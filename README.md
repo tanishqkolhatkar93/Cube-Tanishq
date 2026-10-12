@@ -128,7 +128,7 @@ Your Pod's final repository (tagged), a working integrated system, documentation
 
 ---
 
-## Author - 
+## Builder - 
 
 Name - Tanishq Kolhatkar
 
